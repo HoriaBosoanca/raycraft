@@ -36,7 +36,7 @@ func (world *World) generateBlocks() {
 func (chunk *Chunk) generateBlockData(chunkPos Position2) {
 	chunk.generateTerrain(chunkPos)
 	chunk.addWater()
-	//chunk.addTrees(chunkPos)
+	chunk.addTrees(chunkPos)
 }
 
 func (chunk *Chunk) addBlock(block int8, chunkPos Position3) {
@@ -76,7 +76,7 @@ func (chunk *Chunk) addWater() {
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {
 			for y := range chunk.blocks[x][z] {
-				if y < waterLevel && chunk.blocks[x][z][y].data == AirBlock {
+				if y == waterLevel && chunk.blocks[x][z][y].data == AirBlock {
 					chunk.addBlock(WaterBlock, Position3{X: x, Y: y, Z: z})
 				}
 			}

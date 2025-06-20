@@ -124,3 +124,18 @@ func (world *World) isBlockSurrounded(x, y, z int) bool {
 	}
 	return true
 }
+
+func (chunk *Chunk) isBlockSurrounded(pos3 Position3) bool {
+	if pos3.X <= 0 || pos3.X >= CHUNK_SIZE-1 || pos3.Z <= 0 || pos3.Z >= CHUNK_SIZE-1 || pos3.Y <= 0 || pos3.Y >= CHUNK_HEIGHT-1 {
+		return false
+	}
+	if chunk.blocks[pos3.X-1][pos3.Z][pos3.Y].data == AirBlock ||
+		chunk.blocks[pos3.X+1][pos3.Z][pos3.Y].data == AirBlock ||
+		chunk.blocks[pos3.X][pos3.Z-1][pos3.Y].data == AirBlock ||
+		chunk.blocks[pos3.X][pos3.Z+1][pos3.Y].data == AirBlock ||
+		chunk.blocks[pos3.X][pos3.Z][pos3.Y-1].data == AirBlock ||
+		chunk.blocks[pos3.X][pos3.Z][pos3.Y+1].data == AirBlock {
+		return false
+	}
+	return true
+}

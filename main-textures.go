@@ -9,6 +9,7 @@ var ( // textures begin at the top left of the atlas
 	BLOCKS_PER_ATLAS_WIDTH = float32(8.0)
 	ATLAS_UNIT             = 1.0 / BLOCKS_PER_ATLAS_WIDTH
 
+	AIR          = rl.Vector2{X: ATLAS_UNIT * 2.0, Y: ATLAS_UNIT * 6.0}
 	GRASS_SIDE   = rl.Vector2{X: ATLAS_UNIT * 0.0, Y: ATLAS_UNIT * 6.0}
 	GRASS_TOP    = rl.Vector2{X: ATLAS_UNIT * 0.0, Y: ATLAS_UNIT * 7.0}
 	DIRT         = rl.Vector2{X: ATLAS_UNIT * 1.0, Y: ATLAS_UNIT * 7.0}
@@ -27,6 +28,14 @@ func loadTextures() {
 	}
 
 	textureMap = map[int8][]rl.Vector2{
+		AirBlock: {
+			AIR,
+			AIR,
+			AIR,
+			AIR,
+			AIR,
+			AIR,
+		},
 		GrassBlock: {
 			GRASS_SIDE,
 			GRASS_SIDE,
@@ -68,12 +77,12 @@ func loadTextures() {
 			OAK_LEAF,
 		},
 		WaterBlock: {
+			AIR,
+			AIR,
+			AIR,
+			AIR,
 			WATER,
-			WATER,
-			WATER,
-			WATER,
-			WATER,
-			WATER,
+			AIR,
 		},
 	}
 }
