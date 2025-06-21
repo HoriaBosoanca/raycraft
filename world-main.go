@@ -119,12 +119,12 @@ func (world *World) worldGetBlock(x, y, z int) int8 {
 }
 
 func (world *World) isBlockSurrounded(x, y, z int) bool {
-	if world.worldGetBlock(x-1, y, z) == AirBlock ||
-		world.worldGetBlock(x+1, y, z) == AirBlock ||
-		world.worldGetBlock(x, y-1, z) == AirBlock ||
-		world.worldGetBlock(x, y+1, z) == AirBlock ||
-		world.worldGetBlock(x, y, z-1) == AirBlock ||
-		world.worldGetBlock(x, y, z+1) == AirBlock {
+	if isTransparent(world.worldGetBlock(x-1, y, z)) ||
+		isTransparent(world.worldGetBlock(x+1, y, z)) ||
+		isTransparent(world.worldGetBlock(x, y-1, z)) ||
+		isTransparent(world.worldGetBlock(x, y+1, z)) ||
+		isTransparent(world.worldGetBlock(x, y, z-1)) ||
+		isTransparent(world.worldGetBlock(x, y, z+1)) {
 		return false
 	}
 	return true
@@ -134,12 +134,12 @@ func (chunk *Chunk) isBlockSurrounded(pos3 Position3) bool {
 	if pos3.X <= 0 || pos3.X >= CHUNK_SIZE-1 || pos3.Z <= 0 || pos3.Z >= CHUNK_SIZE-1 || pos3.Y <= 0 || pos3.Y >= CHUNK_HEIGHT-1 {
 		return false
 	}
-	if chunk.blocks[pos3.X-1][pos3.Z][pos3.Y].data == AirBlock ||
-		chunk.blocks[pos3.X+1][pos3.Z][pos3.Y].data == AirBlock ||
-		chunk.blocks[pos3.X][pos3.Z-1][pos3.Y].data == AirBlock ||
-		chunk.blocks[pos3.X][pos3.Z+1][pos3.Y].data == AirBlock ||
-		chunk.blocks[pos3.X][pos3.Z][pos3.Y-1].data == AirBlock ||
-		chunk.blocks[pos3.X][pos3.Z][pos3.Y+1].data == AirBlock {
+	if isTransparent(chunk.blocks[pos3.X-1][pos3.Z][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X+1][pos3.Z][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z-1][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z+1][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z][pos3.Y-1].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z][pos3.Y+1].data) {
 		return false
 	}
 	return true

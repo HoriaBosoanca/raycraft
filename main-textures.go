@@ -21,6 +21,7 @@ var ( // textures begin at the top left of the atlas
 )
 
 var transparentBlocks = []int8{
+	AirBlock,
 	WaterBlock,
 	OakLeafBlock,
 }

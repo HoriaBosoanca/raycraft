@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -114,7 +113,7 @@ func (chunkModel *ChunkModel) addBlock(position rl.Vector3, block int8) {
 
 func (chunkModel *ChunkModel) buildChunkMesh() {
 	if !chunkModel.Initialized {
-		fmt.Println("ChunkMesh not initialized")
+		//fmt.Println("ChunkModel not initialized")
 		return
 	}
 

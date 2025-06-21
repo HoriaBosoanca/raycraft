@@ -11,8 +11,8 @@ var terrainNoise = opensimplex.New(seed.Int63())
 var treeNoise = opensimplex.New(seed.Int63())
 
 const (
-	terrainCraziness = 0.03
-	waterLevel       = 9
+	terrainCraziness = 0.02
+	waterLevel       = 12
 	treeCraziness    = 0.5
 	treeAmount       = 0.1 // 0 to 1
 )
@@ -89,8 +89,9 @@ func (chunk *Chunk) addTrees(chunkPos Position2) {
 		for z := range chunk.blocks[x] {
 			worldPos := chunkPos2AndLocalPos2ToWorldPos2(chunkPos, Position2{X: x, Z: z})
 			ground := getGroundLevel(worldPos)
-			if positionHasTree(worldPos) {
-				chunk.addStructure(tree, Position3{X: x, Y: ground, Z: z})
+			if positionHasTree(worldPos) && ground > waterLevel && !chunk.wouldTruncateStructure(tree_crown, Position3{X: x - 2, Y: ground + 5, Z: z - 2}) {
+				chunk.addStructure(tree_trunk, Position3{X: x, Y: ground, Z: z})
+				chunk.addStructure(tree_crown, Position3{X: x - 2, Y: ground + 5, Z: z - 2})
 			}
 		}
 	}
