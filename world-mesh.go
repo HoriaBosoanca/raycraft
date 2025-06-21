@@ -1,11 +1,15 @@
 package main
 
 import (
-	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type ChunkMesh struct {
+	OpaqueModel      ChunkModel
+	TransparentModel ChunkModel
+}
+
+type ChunkModel struct {
 	Initialized bool
 
 	VertexCount    int32
@@ -16,7 +20,7 @@ type ChunkMesh struct {
 	TexcoordsCount int32
 	Texcoords      []float32
 
-	Model rl.Model
+	FinalModel rl.Model
 }
 
 func (world *World) generateMeshes() {
@@ -36,27 +40,32 @@ func (chunk *Chunk) generateChunkMesh() {
 					continue
 				}
 				drawPos := rl.Vector3{X: float32(worldPos.X), Y: float32(y), Z: float32(worldPos.Z)}
-				chunk.mesh.addBlock(drawPos, block.data)
+				if isTransparent(block.data) {
+					chunk.mesh.TransparentModel.addBlock(drawPos, block.data)
+				} else {
+					chunk.mesh.OpaqueModel.addBlock(drawPos, block.data)
+				}
 			}
 		}
 	}
-	chunk.mesh.buildChunkMesh()
+	chunk.mesh.OpaqueModel.buildChunkMesh()
+	chunk.mesh.TransparentModel.buildChunkMesh()
 }
 
-func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
+func (chunkModel *ChunkModel) addBlock(position rl.Vector3, block int8) {
 	// Initialization
-	if !chunkMesh.Initialized {
-		chunkMesh.Initialized = true
-		chunkMesh.VertexCount = 0
-		chunkMesh.Vertices = make([]float32, 0)
-		chunkMesh.TriangleCount = 0
-		chunkMesh.Indices = make([]uint16, 0)
-		chunkMesh.Colors = make([]uint8, 0)
-		chunkMesh.TexcoordsCount = 0
+	if !chunkModel.Initialized {
+		chunkModel.Initialized = true
+		chunkModel.VertexCount = 0
+		chunkModel.Vertices = make([]float32, 0)
+		chunkModel.TriangleCount = 0
+		chunkModel.Indices = make([]uint16, 0)
+		chunkModel.Colors = make([]uint8, 0)
+		chunkModel.TexcoordsCount = 0
 	}
 
 	// Vertices
-	chunkMesh.VertexCount += int32(len(cubeVertices) / 3)
+	chunkModel.VertexCount += int32(len(cubeVertices) / 3)
 	translatedVertices := make([]float32, len(cubeVertices))
 	copy(translatedVertices, cubeVertices)
 	for i := range translatedVertices {
@@ -69,19 +78,19 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 			translatedVertices[i] += position.Z
 		}
 	}
-	chunkMesh.Vertices = append(chunkMesh.Vertices, translatedVertices...)
+	chunkModel.Vertices = append(chunkModel.Vertices, translatedVertices...)
 
 	// Indices
-	chunkMesh.TriangleCount += 12
-	startIndex := uint16(len(chunkMesh.Indices))
+	chunkModel.TriangleCount += 12
+	startIndex := uint16(len(chunkModel.Indices))
 	for i := startIndex; i < startIndex+36; i++ {
-		chunkMesh.Indices = append(chunkMesh.Indices, i)
+		chunkModel.Indices = append(chunkModel.Indices, i)
 	}
 
 	// Colors
 	for i := 0; i < 36; i++ {
 		white := rl.White
-		chunkMesh.Colors = append(chunkMesh.Colors, white.R, white.G, white.B, white.A)
+		chunkModel.Colors = append(chunkModel.Colors, white.R, white.G, white.B, white.A)
 	}
 
 	// Textures
@@ -99,27 +108,27 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 			coordinatesUV[i] = v + textureMap[block][i/12].Y
 		}
 	}
-	chunkMesh.Texcoords = append(chunkMesh.Texcoords, coordinatesUV...)
+	chunkModel.Texcoords = append(chunkModel.Texcoords, coordinatesUV...)
 }
 
-func (chunkMesh *ChunkMesh) buildChunkMesh() {
-	if !chunkMesh.Initialized {
-		fmt.Println("ChunkMesh not initialized")
+func (chunkModel *ChunkModel) buildChunkMesh() {
+	if !chunkModel.Initialized {
+		//fmt.Println("ChunkModel not initialized")
 		return
 	}
 
 	var mesh rl.Mesh
-	mesh.VertexCount = chunkMesh.VertexCount
-	mesh.Vertices = &chunkMesh.Vertices[0]
-	mesh.TriangleCount = chunkMesh.TriangleCount
-	mesh.Indices = &chunkMesh.Indices[0]
-	mesh.Colors = &chunkMesh.Colors[0]
-	mesh.Texcoords = &chunkMesh.Texcoords[0]
+	mesh.VertexCount = chunkModel.VertexCount
+	mesh.Vertices = &chunkModel.Vertices[0]
+	mesh.TriangleCount = chunkModel.TriangleCount
+	mesh.Indices = &chunkModel.Indices[0]
+	mesh.Colors = &chunkModel.Colors[0]
+	mesh.Texcoords = &chunkModel.Texcoords[0]
 
 	rl.UploadMesh(&mesh, false)
-	chunkMesh.Model = rl.LoadModelFromMesh(mesh)
-	if chunkMesh.Model.Materials != nil {
-		chunkMesh.Model.Materials.Maps.Texture = atlas
+	chunkModel.FinalModel = rl.LoadModelFromMesh(mesh)
+	if chunkModel.FinalModel.Materials != nil {
+		chunkModel.FinalModel.Materials.Maps.Texture = atlas
 	}
 }
 

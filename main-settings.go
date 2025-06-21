@@ -20,7 +20,7 @@ var camera3D = rl.Camera{
 
 const (
 	CHUNK_SIZE      = 16
-	CHUNK_HEIGHT    = 32
+	CHUNK_HEIGHT    = 48
 	WORLD_SIZE      = 16 // the actual number of chunks is (2*WORLD_SIZE+1)^2
 	RENDER_DISTANCE = 32 // the number of chunks loaded is (2*RENDER_DISTANCE+1)^2
 )

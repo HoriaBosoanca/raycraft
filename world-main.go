@@ -2,6 +2,7 @@ package main
 
 import (
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"math"
 )
 
 type World struct {
@@ -94,6 +95,10 @@ func chunkPos2AndLocalPos2ToWorldPos2(chunkPos, localPos Position2) (worldPos Po
 	return Position2{X: chunkPos.X*CHUNK_SIZE + localPos.X, Z: chunkPos.Z*CHUNK_SIZE + localPos.Z}
 }
 
+func distPos2(pos1, pos2 Position2) int {
+	return int(math.Abs(float64(pos1.X-pos2.X)) + math.Abs(float64(pos1.Z-pos2.Z)))
+}
+
 // utils:
 
 func (world *World) worldGetBlock(x, y, z int) int8 {
@@ -114,12 +119,27 @@ func (world *World) worldGetBlock(x, y, z int) int8 {
 }
 
 func (world *World) isBlockSurrounded(x, y, z int) bool {
-	if world.worldGetBlock(x-1, y, z) == AirBlock ||
-		world.worldGetBlock(x+1, y, z) == AirBlock ||
-		world.worldGetBlock(x, y-1, z) == AirBlock ||
-		world.worldGetBlock(x, y+1, z) == AirBlock ||
-		world.worldGetBlock(x, y, z-1) == AirBlock ||
-		world.worldGetBlock(x, y, z+1) == AirBlock {
+	if isTransparent(world.worldGetBlock(x-1, y, z)) ||
+		isTransparent(world.worldGetBlock(x+1, y, z)) ||
+		isTransparent(world.worldGetBlock(x, y-1, z)) ||
+		isTransparent(world.worldGetBlock(x, y+1, z)) ||
+		isTransparent(world.worldGetBlock(x, y, z-1)) ||
+		isTransparent(world.worldGetBlock(x, y, z+1)) {
+		return false
+	}
+	return true
+}
+
+func (chunk *Chunk) isBlockSurrounded(pos3 Position3) bool {
+	if pos3.X <= 0 || pos3.X >= CHUNK_SIZE-1 || pos3.Z <= 0 || pos3.Z >= CHUNK_SIZE-1 || pos3.Y <= 0 || pos3.Y >= CHUNK_HEIGHT-1 {
+		return false
+	}
+	if isTransparent(chunk.blocks[pos3.X-1][pos3.Z][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X+1][pos3.Z][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z-1][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z+1][pos3.Y].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z][pos3.Y-1].data) ||
+		isTransparent(chunk.blocks[pos3.X][pos3.Z][pos3.Y+1].data) {
 		return false
 	}
 	return true

@@ -7,6 +7,8 @@ import (
 
 var world = &World{}
 
+// TODO: find out why overlapping models' alpha flickers weirdly
+
 func main() {
 	Init()
 	for !rl.WindowShouldClose() {

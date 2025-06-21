@@ -9,6 +9,7 @@ var ( // textures begin at the top left of the atlas
 	BLOCKS_PER_ATLAS_WIDTH = float32(8.0)
 	ATLAS_UNIT             = 1.0 / BLOCKS_PER_ATLAS_WIDTH
 
+	AIR          = rl.Vector2{X: ATLAS_UNIT * 2.0, Y: ATLAS_UNIT * 6.0}
 	GRASS_SIDE   = rl.Vector2{X: ATLAS_UNIT * 0.0, Y: ATLAS_UNIT * 6.0}
 	GRASS_TOP    = rl.Vector2{X: ATLAS_UNIT * 0.0, Y: ATLAS_UNIT * 7.0}
 	DIRT         = rl.Vector2{X: ATLAS_UNIT * 1.0, Y: ATLAS_UNIT * 7.0}
@@ -19,6 +20,12 @@ var ( // textures begin at the top left of the atlas
 	WATER        = rl.Vector2{X: ATLAS_UNIT * 1.0, Y: ATLAS_UNIT * 6.0}
 )
 
+var transparentBlocks = []int8{
+	AirBlock,
+	WaterBlock,
+	OakLeafBlock,
+}
+
 func loadTextures() {
 	atlas = rl.LoadTexture("assets/atlas.png")
 	cursor = rl.LoadTexture("assets/crosshair.png")
@@ -27,6 +34,14 @@ func loadTextures() {
 	}
 
 	textureMap = map[int8][]rl.Vector2{
+		AirBlock: {
+			AIR,
+			AIR,
+			AIR,
+			AIR,
+			AIR,
+			AIR,
+		},
 		GrassBlock: {
 			GRASS_SIDE,
 			GRASS_SIDE,
@@ -68,14 +83,23 @@ func loadTextures() {
 			OAK_LEAF,
 		},
 		WaterBlock: {
+			AIR,
+			AIR,
+			AIR,
+			AIR,
 			WATER,
-			WATER,
-			WATER,
-			WATER,
-			WATER,
-			WATER,
+			AIR,
 		},
 	}
+}
+
+func isTransparent(block int8) bool {
+	for _, transparentBlock := range transparentBlocks {
+		if block == transparentBlock {
+			return true
+		}
+	}
+	return false
 }
 
 var textureMap map[int8][]rl.Vector2
