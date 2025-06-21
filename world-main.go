@@ -2,6 +2,7 @@ package main
 
 import (
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"math"
 )
 
 type World struct {
@@ -92,6 +93,10 @@ func worldPos3ToLocalPos3(worldPos Position3) (localPos Position3) {
 
 func chunkPos2AndLocalPos2ToWorldPos2(chunkPos, localPos Position2) (worldPos Position2) {
 	return Position2{X: chunkPos.X*CHUNK_SIZE + localPos.X, Z: chunkPos.Z*CHUNK_SIZE + localPos.Z}
+}
+
+func distPos2(pos1, pos2 Position2) int {
+	return int(math.Abs(float64(pos1.X-pos2.X)) + math.Abs(float64(pos1.Z-pos2.Z)))
 }
 
 // utils:
