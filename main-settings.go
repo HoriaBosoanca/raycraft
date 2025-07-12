@@ -33,7 +33,7 @@ const (
 )
 
 var (
-	SHOW_PLAYER_TARGET = true
+	SHOW_PLAYER_TARGET = false
 )
 
 // --> PHYSICS
