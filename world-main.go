@@ -118,6 +118,10 @@ func (world *World) worldGetBlock(x, y, z int) int8 {
 	return chunk.blocks[localPos.X][localPos.Z][y].data
 }
 
+func (world *World) worldGetBlockFloat(x, y, z float32) int8 {
+	return world.worldGetBlock(int(math.Floor(float64(x))), int(math.Floor(float64(y))), int(math.Floor(float64(z))))
+}
+
 func (world *World) isBlockSurrounded(x, y, z int) bool {
 	if isTransparent(world.worldGetBlock(x-1, y, z)) ||
 		isTransparent(world.worldGetBlock(x+1, y, z)) ||

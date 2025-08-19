@@ -9,7 +9,7 @@ import (
 var fps int32 = 500
 
 var camera3D = rl.Camera{
-	Position:   rl.NewVector3(1.0, 40.0, 1.0),
+	Position:   rl.NewVector3(1.0, 500.0, 1.0),
 	Target:     rl.NewVector3(0.0, 0.0, 0.0),
 	Up:         rl.NewVector3(0.0, 1.0, 0.0),
 	Fovy:       90.0,
@@ -28,12 +28,12 @@ const (
 // --> PLAYER
 
 const (
-	MOVE_SPEED   float32 = 50
-	ASCEND_SPEED float32 = 100
-)
-
-var (
-	SHOW_PLAYER_TARGET = false
+	// survival
+	SURVIVAL_MOVE_SPEED  float32 = 1.5
+	GRAVITY_ACCELERATION float32 = 20.0
+	// creative
+	CREATIVE_MOVE_SPEED float32 = 50
+	ASCEND_SPEED        float32 = 100
 )
 
 // --> PHYSICS
