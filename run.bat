@@ -1,1 +1,1 @@
-go build -o .\bin\raygocraft.exe && .\bin\raygocraft.exe
+cd Raygocraft-game && go build -o raygocraft.exe && .\raygocraft.exe
