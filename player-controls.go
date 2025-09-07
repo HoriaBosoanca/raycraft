@@ -6,7 +6,7 @@ import (
 
 var (
 	SHOW_PLAYER_TARGET = false
-	CREATIVE_MODE      = false
+	CREATIVE_MODE      = true
 )
 
 func handleInput() {

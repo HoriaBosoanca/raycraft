@@ -49,7 +49,7 @@ func draw3D() {
 }
 
 func draw2D() {
-	canvasDrawText("F11 = fullscreen, F10 = show cursor, F9 = show target block, F8 = creative mode", 5.0, 5.0, 20.0, rl.Black)
+	canvasDrawText("F11 = fullscreen, F10 = show cursor, F9 = show target block, F8 = survival mode", 5.0, 5.0, 20.0, rl.Black)
 	displayCoords(5.0, 20.0)
 	displayFPS(5.0, 50.0)
 	displayMemUsage(5.0, 65.0)
