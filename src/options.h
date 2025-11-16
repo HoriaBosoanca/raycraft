@@ -2,7 +2,7 @@
 
 inline bool cursor_enabled = false;
 
-inline void settings_update() {
+inline void options() {
     if (IsKeyPressed(KEY_F11)) {
         ToggleFullscreen();
     }
@@ -13,5 +13,8 @@ inline void settings_update() {
             EnableCursor();
         }
         cursor_enabled = !cursor_enabled;
+    }
+    if (IsKeyPressed(KEY_F9)) {
+        Physics::STEP_PHYSICS = !Physics::STEP_PHYSICS;
     }
 }

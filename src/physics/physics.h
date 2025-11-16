@@ -4,12 +4,13 @@
 
 namespace Physics
 {
-    extern btRigidBody* playerRb;
+    extern bool STEP_PHYSICS;
     void init();
     void update();
-    void add_static_cube(float x, float y, float z);
-    void init_player();
-    void add_force_player(float x, float y, float z);
+    void add_static_cube(btVector3 pos);
+    void add_force_player(btVector3 force);
     btVector3 get_player_pos();
-    bool did_player_collide_any();
+    btVector3 get_player_velocity();
+    void set_player_velocity(btVector3 vel);
+    bool is_player_grounded();
 }
