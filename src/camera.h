@@ -38,16 +38,16 @@ inline void wasd() {
     }
 }
 
-constexpr float JUMP_FORCE = 200000.0f;
+constexpr float JUMP_FORCE = 300.0f;
 inline void jump() {
     if (IsKeyDown(KEY_SPACE) && Physics::is_player_grounded()) {
         const btVector3 vel = Physics::get_player_velocity();
-        Physics::set_player_velocity(btVector3(vel.x(), 0.0f, vel.z()));
-        Physics::add_force_player(btVector3(0.0f, JUMP_FORCE*GetFrameTime(), 0.0f));
+        Physics::set_player_velocity(btVector3(0.0f, 0.0f, 0.0f));
+        Physics::add_force_player(btVector3(0.0f, JUMP_FORCE, 0.0f));
     }
 }
 
-constexpr float MAX_VEL_VERTICAL = 5.0f;
+constexpr float MAX_VEL_VERTICAL = 50.0f;
 constexpr float MAX_VEL_HORIZONTAL = 5.0f;
 inline void clamp_velocity() {
     btVector3 vel = Physics::get_player_velocity();

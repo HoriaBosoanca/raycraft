@@ -44,7 +44,7 @@ namespace Physics
 
     void update() {
         if (STEP_PHYSICS) {
-            dynamicsWorld->stepSimulation(GetFrameTime());
+            dynamicsWorld->stepSimulation(GetFrameTime(), 20);
         }
     }
 
