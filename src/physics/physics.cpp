@@ -1,5 +1,4 @@
 #include "physics.h"
-
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "raylib.h"
@@ -17,7 +16,7 @@ namespace Physics
         btTransform transform;
         transform.setIdentity();
         transform.setOrigin(btVector3(0.0f, 50.0f, 0.0f));
-        constexpr float mass = 1.0f;
+        constexpr float mass = 3.0f;
         btVector3 localInertia;
         player->calculateLocalInertia(mass, localInertia);
         const btRigidBody::btRigidBodyConstructionInfo rbInfo(
@@ -28,7 +27,7 @@ namespace Physics
         );
         playerRb = new btRigidBody(rbInfo);
         playerRb->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
-        playerRb->setFriction(2.0f);
+        playerRb->setFriction(0.0f);
         dynamicsWorld->addRigidBody(playerRb);
     }
 
@@ -61,10 +60,6 @@ namespace Physics
             btVector3(0.0f, 0.0f, 0.0f)
         );
         dynamicsWorld->addRigidBody(new btRigidBody(rbInfo));
-    }
-
-    void add_force_player(const btVector3 force) {
-        playerRb->applyCentralForce(force);
     }
 
     btVector3 get_player_pos() {

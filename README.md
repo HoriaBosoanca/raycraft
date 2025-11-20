@@ -8,8 +8,6 @@ Add content
 - ?
 
 Fix physics
-- Fix camera teleportation when jumping (happens sometimes)
-- Fix getting stuck on ledges
 - Fix not being able to jump on the edge of a block
 
 Optimize renderer

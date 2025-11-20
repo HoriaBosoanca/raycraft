@@ -8,7 +8,6 @@ namespace Physics
     void init();
     void update();
     void add_static_cube(btVector3 pos);
-    void add_force_player(btVector3 force);
     btVector3 get_player_pos();
     btVector3 get_player_velocity();
     void set_player_velocity(btVector3 vel);

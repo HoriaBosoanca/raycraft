@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <bits/ostream.tcc>
+
 #include "raylib.h"
 #include "raymath.h"
 #include "physics/physics.h"
@@ -16,78 +18,55 @@ inline void setup_camera() {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-constexpr float MOVE_SPEED = 20000.0f;
-inline void wasd() {
+constexpr float JUMP_FORCE = 5.5f;
+constexpr float MOVE_SPEED = 3.7f;
+inline void move() {
     const btVector3 pos = Physics::get_player_pos();
-    const Vector3 diff = Vector3Subtract(camera.target, camera.position);
+    const Vector3 diff = camera.target - camera.position;
     camera.position = Vector3(pos.x(), pos.y()+0.5f, pos.z());
     camera.target = Vector3(pos.x()+diff.x, pos.y()+diff.y+0.5f, pos.z()+diff.z);
-    const Vector2 raw_direction = Vector2Normalize(Vector2(diff.x, diff.z));
-    const Vector2 direction(raw_direction.x*MOVE_SPEED*GetFrameTime(), raw_direction.y*MOVE_SPEED*GetFrameTime());
+    const Vector2 dir = Vector2Normalize(Vector2(diff.x, diff.z));
+    Vector2 mov(0.0f, 0.0f);
     if (IsKeyDown(KEY_W)) {
-        Physics::add_force_player(btVector3(direction.x, 0.0f, direction.y));
+        mov += Vector2(dir.x, dir.y);
     }
     if (IsKeyDown(KEY_A)) {
-        Physics::add_force_player(btVector3(direction.y, 0.0f, -direction.x));
+        mov += Vector2(dir.y, -dir.x);
     }
     if (IsKeyDown(KEY_S)) {
-        Physics::add_force_player(btVector3(-direction.x, 0.0f, -direction.y));
+        mov += Vector2(-dir.x, -dir.y);
     }
     if (IsKeyDown(KEY_D)) {
-        Physics::add_force_player(btVector3(-direction.y, 0.0f, direction.x));
+        mov += Vector2(-dir.y, dir.x);
     }
-}
-
-constexpr float JUMP_FORCE = 300.0f;
-inline void jump() {
-    if (IsKeyDown(KEY_SPACE) && Physics::is_player_grounded()) {
-        const btVector3 vel = Physics::get_player_velocity();
-        Physics::set_player_velocity(btVector3(0.0f, 0.0f, 0.0f));
-        Physics::add_force_player(btVector3(0.0f, JUMP_FORCE, 0.0f));
-    }
-}
-
-constexpr float MAX_VEL_VERTICAL = 50.0f;
-constexpr float MAX_VEL_HORIZONTAL = 5.0f;
-inline void clamp_velocity() {
-    btVector3 vel = Physics::get_player_velocity();
-    if (vel.y() > MAX_VEL_VERTICAL) {
-        vel.setY(MAX_VEL_VERTICAL);
-    }
-    if (abs(vel.x()) + abs(vel.z()) > MAX_VEL_HORIZONTAL) {
-        // current x / current z = ratio
-        // new x / new z = the same ratio => new x = ratio * new z
-        // new x + new z = max velocity
-        const float ratio = abs(vel.x() / vel.z());
-        const float abs_new_z = MAX_VEL_HORIZONTAL/(ratio+1.0f);
-        const float abs_new_x = MAX_VEL_HORIZONTAL - abs_new_z;
-        vel.setX((vel.x() < 0.0f ? -1.0f : 1.0f) * abs_new_x);
-        vel.setZ((vel.z() < 0.0f ? -1.0f : 1.0f) * abs_new_z);
-    }
-    Physics::set_player_velocity(vel);
+    mov = Vector2Normalize(mov) * MOVE_SPEED;
+    btVector3 final_mov(mov.x,
+        IsKeyDown(KEY_SPACE) && Physics::is_player_grounded() ? JUMP_FORCE : Physics::get_player_velocity().y(),
+        mov.y);
+    Physics::set_player_velocity(final_mov);
+    std::cout << Physics::get_player_velocity().x() << " " << Physics::get_player_velocity().z() << "\n";
 }
 
 constexpr float ASCEND_SPEED = 30.0f;
 constexpr float FLY_SPEED = 30.0f;
 inline void freecam() {
-    const Vector3 diff = Vector3Subtract(camera.target, camera.position);
-    const Vector2 raw_direction = Vector2Normalize(Vector2(diff.x, diff.z));
-    const Vector2 direction(raw_direction.x*FLY_SPEED*GetFrameTime(), raw_direction.y*FLY_SPEED*GetFrameTime());
+    const Vector3 diff = camera.target - camera.position;
+    const Vector2 dir = Vector2Normalize(Vector2(diff.x, diff.z))*FLY_SPEED*GetFrameTime();
     if (IsKeyDown(KEY_W)) {
-        camera.position += Vector3(direction.x, 0.0f, direction.y);
-        camera.target += Vector3(direction.x, 0.0f, direction.y);
+        camera.position += Vector3(dir.x, 0.0f, dir.y);
+        camera.target += Vector3(dir.x, 0.0f, dir.y);
     }
     if (IsKeyDown(KEY_A)) {
-        camera.position += Vector3(direction.y, 0.0f, -direction.x);
-        camera.target += Vector3(direction.y, 0.0f, -direction.x);
+        camera.position += Vector3(dir.y, 0.0f, -dir.x);
+        camera.target += Vector3(dir.y, 0.0f, -dir.x);
     }
     if (IsKeyDown(KEY_S)) {
-        camera.position += Vector3(-direction.x, 0.0f, -direction.y);
-        camera.target += Vector3(-direction.x, 0.0f, -direction.y);
+        camera.position += Vector3(-dir.x, 0.0f, -dir.y);
+        camera.target += Vector3(-dir.x, 0.0f, -dir.y);
     }
     if (IsKeyDown(KEY_D)) {
-        camera.position += Vector3(-direction.y, 0.0f, direction.x);
-        camera.target += Vector3(-direction.y, 0.0f, direction.x);
+        camera.position += Vector3(-dir.y, 0.0f, dir.x);
+        camera.target += Vector3(-dir.y, 0.0f, dir.x);
     }
     if (IsKeyDown(KEY_LEFT_SHIFT)) {
         camera.position += Vector3(0.0f, -ASCEND_SPEED*GetFrameTime(), 0.0f);
@@ -101,9 +80,7 @@ inline void freecam() {
 
 inline void update_camera() {
     if (Physics::STEP_PHYSICS) {
-        wasd();
-        jump();
-        clamp_velocity();
+        move();
     } else {
         freecam();
     }

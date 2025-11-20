@@ -22,7 +22,6 @@ void update() {
 }
 
 int main() {
-    // SetTargetFPS(30);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "Raycppcraft");
     setup();
