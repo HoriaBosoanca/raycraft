@@ -1,8 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <bits/ostream.tcc>
-
 #include "raylib.h"
 #include "raymath.h"
 #include "physics/physics.h"
@@ -18,8 +15,8 @@ inline void setup_camera() {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-constexpr float JUMP_FORCE = 5.5f;
-constexpr float MOVE_SPEED = 3.7f;
+constexpr float JUMP_FORCE = 5.0f;
+constexpr float MOVE_SPEED = 3.5f;
 inline void move() {
     const btVector3 pos = Physics::get_player_pos();
     const Vector3 diff = camera.target - camera.position;
@@ -44,7 +41,6 @@ inline void move() {
         IsKeyDown(KEY_SPACE) && Physics::is_player_grounded() ? JUMP_FORCE : Physics::get_player_velocity().y(),
         mov.y);
     Physics::set_player_velocity(final_mov);
-    std::cout << Physics::get_player_velocity().x() << " " << Physics::get_player_velocity().z() << "\n";
 }
 
 constexpr float ASCEND_SPEED = 30.0f;

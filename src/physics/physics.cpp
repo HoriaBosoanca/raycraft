@@ -16,7 +16,7 @@ namespace Physics
         btTransform transform;
         transform.setIdentity();
         transform.setOrigin(btVector3(0.0f, 50.0f, 0.0f));
-        constexpr float mass = 3.0f;
+        constexpr float mass = 1.0f;
         btVector3 localInertia;
         player->calculateLocalInertia(mass, localInertia);
         const btRigidBody::btRigidBodyConstructionInfo rbInfo(
