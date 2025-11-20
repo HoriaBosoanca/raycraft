@@ -7,12 +7,18 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
         src/*.cpp
         src/renderer/*.cpp
         src/physics/*.cpp
+        src/player/*.cpp
+        src/generator/*.cpp
 )
 add_executable(raycppcraft ${SOURCES})
 add_subdirectory(lib/raylib-5.5)
 add_subdirectory(lib/bullet3-3.25)
 target_include_directories(raycppcraft PRIVATE
         src
+        src/renderer
+        src/physics
+        src/player
+        src/generator
         lib/FastNoiseLite/include
         lib/FastNoiseLite/include/physics
         lib/FastNoiseLite/include/renderer

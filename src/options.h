@@ -1,5 +1,7 @@
 #pragma once
 
+#include "physics.h"
+
 inline bool cursor_enabled = false;
 
 inline void options() {

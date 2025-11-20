@@ -1,34 +1,35 @@
 #include "raylib.h"
-#include "camera.h"
+#include "player.h"
 #include "options.h"
-#include "physics/physics.h"
-#include "renderer/textures.h"
-#include "renderer/world.h"
+#include "physics.h"
+#include "textures.h"
+#include "world.h"
 #include "log.h"
+#include "generator/worldgen.h"
 
-void setup() {
-    Renderer::load_resources();
+void init() {
     Physics::init();
-    Renderer::generate_world();
-    setup_camera();
+    Renderer::load_resources();
+    Generator::generate_world();
+    Player::init();
     DisableCursor();
 }
 
 void update() {
     options();
     Physics::update();
-    update_camera();
     Renderer::render_world();
+    Player::update();
 }
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "Raycppcraft");
-    setup();
+    init();
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        BeginMode3D(camera);
+        BeginMode3D(Player::camera);
         update();
         EndMode3D();
         log2D();
