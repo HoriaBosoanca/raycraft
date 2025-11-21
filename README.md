@@ -12,8 +12,8 @@ Fix physics
 - Optimize physics to only simulate around the player (or all entities?)
 
 Optimize renderer
-- *Check for obfuscated blocks across chunks
 - Make the renderer skip all overlapping faces
 
 Rewrite code
+- *Use int vectors instead
 - Wrap more things in objects and make proper destructors and shutdown functions

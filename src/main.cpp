@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "raylib.h"
 #include "player.h"
 #include "options.h"
@@ -11,6 +13,7 @@ void init() {
     Physics::init();
     Renderer::load_resources();
     Generator::generate_world();
+    Renderer::build_world_models();
     Player::init();
     DisableCursor();
 }

@@ -12,9 +12,10 @@ namespace Renderer
     class Chunk {
     public:
         // data
-        void add_block(Vector3 local_pos, BLOCK block);
+        void set_block(Vector3 local_pos, BLOCK block);
+        BLOCK get_block(Vector3 local_pos) const;
         // model
-        void build_model();
+        void build_model(Vector2 chunk_pos);
         void draw_model(Vector3 position) const;
 
     private:

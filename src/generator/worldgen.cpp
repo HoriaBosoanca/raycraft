@@ -15,9 +15,9 @@ namespace Generator
                     world_pos.y* Renderer::CHUNK_SIZE + (float) z)+1.0f)/2.0f*(float)Renderer::CHUNK_HEIGHT);
                 int y = 0;
                 for (; y < height-1; y++) {
-                    chunk.add_block(Vector3{(float) x, (float) y, (float) z}, y < (height-1)/2 ? Renderer::BLOCK::STONE : Renderer::BLOCK::DIRT);
+                    chunk.set_block(Vector3{(float) x, (float) y, (float) z}, y < (height-1)/2 ? Renderer::BLOCK::STONE : Renderer::BLOCK::DIRT);
                 }
-                chunk.add_block(Vector3{(float) x, (float) y, (float) z}, Renderer::BLOCK::GRASS);
+                chunk.set_block(Vector3{(float) x, (float) y, (float) z}, Renderer::BLOCK::GRASS);
                 Physics::add_static_cube(btVector3(world_pos.x* Renderer::CHUNK_SIZE + (float) x,
                     (float) y,
                     world_pos.y* Renderer::CHUNK_SIZE + (float) z));
@@ -32,7 +32,7 @@ namespace Generator
                 Renderer::Chunk chunk;
                 const Vector2 chunk_pos((float) x, (float) z);
                 generate_chunk(chunk, chunk_pos);
-                Renderer::add_chunk(chunk, chunk_pos);
+                Renderer::set_chunk(chunk, chunk_pos);
             }
         }
     }

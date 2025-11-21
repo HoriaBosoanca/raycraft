@@ -1,14 +1,19 @@
 #include "chunk.h"
 #include <raymath.h>
 #include "textures.h"
+#include "world.h"
 
 namespace Renderer
 {
-    void Chunk::add_block(Vector3 local_pos, BLOCK block) {
+    void Chunk::set_block(const Vector3 local_pos, const BLOCK block) {
         blocks[(int)local_pos.x][(int)local_pos.y][(int)local_pos.z] = block;
     }
 
-    bool Chunk::is_block_surrounded(Vector3 local_pos) const {
+    BLOCK Chunk::get_block(const Vector3 local_pos) const {
+        return blocks[(int)local_pos.x][(int)local_pos.y][(int)local_pos.z];
+    }
+
+    bool Chunk::is_block_surrounded(const Vector3 local_pos) const {
         if (local_pos.x == 0 || local_pos.x == CHUNK_SIZE-1 || local_pos.y == 0 || local_pos.y == CHUNK_HEIGHT-1 || local_pos.z == 0 || local_pos.z == CHUNK_SIZE-1) return false;
         if (blocks[(int)local_pos.x-1][(int)local_pos.y][(int)local_pos.z] != BLOCK::AIR &&
             blocks[(int)local_pos.x+1][(int)local_pos.y][(int)local_pos.z] != BLOCK::AIR &&
@@ -63,11 +68,11 @@ namespace Renderer
         }
     }
 
-    void Chunk::build_model() {
+    void Chunk::build_model(Vector2 chunk_pos) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_HEIGHT; y++) {
                 for (int z = 0; z < CHUNK_SIZE; z++) {
-                    if (blocks[x][y][z] != BLOCK::AIR && !is_block_surrounded(Vector3{(float) x, (float) y, (float) z})) {
+                    if (blocks[x][y][z] != BLOCK::AIR && !Renderer::is_block_surrounded(chunk_pos, Vector3{(float) x, (float) y, (float) z})) {
                         add_block_to_model(Vector3{(float) x, (float) y, (float) z}, blocks[x][y][z]);
                     }
                 }
