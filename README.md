@@ -15,5 +15,5 @@ Optimize renderer
 - Make the renderer skip all overlapping faces
 
 Rewrite code
-- *Use int vectors instead
+- Use int vectors and find a better data structure for the world
 - Wrap more things in objects and make proper destructors and shutdown functions
