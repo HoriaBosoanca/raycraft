@@ -7,12 +7,12 @@
 #include "textures.h"
 #include "world.h"
 #include "log.h"
-#include "generator/worldgen.h"
+#include "worldgen.h"
 
 void init() {
     Physics::init();
-    Renderer::load_resources();
     Generator::generate_world();
+    Renderer::load_resources();
     Renderer::build_world_models();
     Player::init();
     DisableCursor();

@@ -68,7 +68,7 @@ namespace Renderer
         }
     }
 
-    void Chunk::build_model(Vector2 chunk_pos) {
+    void Chunk::build_model(const Vector2 chunk_pos) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_HEIGHT; y++) {
                 for (int z = 0; z < CHUNK_SIZE; z++) {

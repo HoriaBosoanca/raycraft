@@ -8,19 +8,19 @@ namespace Generator
 {
     FastNoiseLite noise;
 
-    void generate_chunk(Renderer::Chunk& chunk, const Vector2 world_pos) {
+    void generate_chunk(Renderer::Chunk& chunk, const Vector2 chunk_pos) {
         for (int x = 0; x < Renderer::CHUNK_SIZE; x++) {
             for (int z = 0; z < Renderer::CHUNK_SIZE; z++) {
-                const int height = (int) ((noise.GetNoise(world_pos.x* Renderer::CHUNK_SIZE + (float) x,
-                    world_pos.y* Renderer::CHUNK_SIZE + (float) z)+1.0f)/2.0f*(float)Renderer::CHUNK_HEIGHT);
+                const int height = (int) ((noise.GetNoise(chunk_pos.x* Renderer::CHUNK_SIZE + (float) x,
+                    chunk_pos.y* Renderer::CHUNK_SIZE + (float) z)+1.0f)/2.0f*(float)Renderer::CHUNK_HEIGHT);
                 int y = 0;
                 for (; y < height-1; y++) {
                     chunk.set_block(Vector3{(float) x, (float) y, (float) z}, y < (height-1)/2 ? Renderer::BLOCK::STONE : Renderer::BLOCK::DIRT);
                 }
                 chunk.set_block(Vector3{(float) x, (float) y, (float) z}, Renderer::BLOCK::GRASS);
-                Physics::add_static_cube(btVector3(world_pos.x* Renderer::CHUNK_SIZE + (float) x,
+                Physics::add_static_cube(btVector3(chunk_pos.x* Renderer::CHUNK_SIZE + (float) x,
                     (float) y,
-                    world_pos.y* Renderer::CHUNK_SIZE + (float) z));
+                    chunk_pos.y* Renderer::CHUNK_SIZE + (float) z));
             }
         }
     }
