@@ -37,7 +37,7 @@ namespace Physics
         btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
         btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
         dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-        dynamicsWorld->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+        dynamicsWorld->setGravity(btVector3(0.0f, -20.0f, 0.0f));
         init_player();
     }
 

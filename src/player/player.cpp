@@ -15,7 +15,7 @@ namespace Player
         camera.projection = CAMERA_PERSPECTIVE;
     }
 
-    constexpr float JUMP_FORCE = 5.0f;
+    constexpr float JUMP_FORCE = 7.0f;
     constexpr float MOVE_SPEED = 3.5f;
     void move() {
         const btVector3 pos = Physics::get_player_pos();
