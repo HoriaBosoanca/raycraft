@@ -8,20 +8,20 @@ namespace Renderer
 {
     inline Mesh cube;
     inline Material default_mat;
-    const float ATLAS_UNIT = 1.0f/8.0f;
+    constexpr float ATLAS_UNIT = 1.0f/8.0f;
     inline Texture2D ATLAS;
 
-    inline void load_resources() {
+    inline void load_textures() {
         ATLAS = LoadTexture("assets/atlas.png");
         default_mat = LoadMaterialDefault();
         cube = GenMeshCube(1.0f, 1.0f, 1.0f);
     }
 
-    inline Vector2 AIR = Vector2{2.0f, 6.0f};
-    inline Vector2 GRASS_TOP = Vector2{0.0f, 7.0f};
-    inline Vector2 GRASS_SIDE = Vector2{0.0f, 6.0f};
-    inline Vector2 DIRT = Vector2{1.0f, 7.0f};
-    inline Vector2 STONE = Vector2{4.0f, 6.0f};
+    inline auto AIR = Vector2{2.0f, 6.0f};
+    inline auto GRASS_TOP = Vector2{0.0f, 7.0f};
+    inline auto GRASS_SIDE = Vector2{0.0f, 6.0f};
+    inline auto DIRT = Vector2{1.0f, 7.0f};
+    inline auto STONE = Vector2{4.0f, 6.0f};
 
     enum class BLOCK : uint8_t {
         AIR,

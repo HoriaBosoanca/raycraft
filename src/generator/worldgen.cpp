@@ -2,25 +2,24 @@
 #include "FastNoiseLite.h"
 #include "physics.h"
 #include "world.h"
-#include "LinearMath/btVector3.h"
 
-namespace Generator
+namespace WorldGen
 {
     FastNoiseLite noise;
 
-    void generate_chunk(Renderer::Chunk& chunk, const Vector2 chunk_pos) {
-        for (int x = 0; x < Renderer::CHUNK_SIZE; x++) {
-            for (int z = 0; z < Renderer::CHUNK_SIZE; z++) {
-                const int height = (int) ((noise.GetNoise(chunk_pos.x* Renderer::CHUNK_SIZE + (float) x,
-                    chunk_pos.y* Renderer::CHUNK_SIZE + (float) z)+1.0f)/2.0f*(float)Renderer::CHUNK_HEIGHT);
-                int y = 0;
-                for (; y < height-1; y++) {
-                    chunk.set_block(Vector3{(float) x, (float) y, (float) z}, y < (height-1)/2 ? Renderer::BLOCK::STONE : Renderer::BLOCK::DIRT);
+    void generate_chunk(Renderer::Chunk& chunk, const Renderer::ChunkPos chunk_pos) {
+        for (uint32_t x = 0; x < Renderer::U_CHUNK_SIZE; x++) {
+            for (uint32_t z = 0; z < Renderer::U_CHUNK_SIZE; z++) {
+                Renderer::WorldPos world_pos = chunk_pos + Renderer::LocalPos{x, 0, z};
+                const auto grass_height = static_cast<uint32_t>((noise.GetNoise(static_cast<float>(world_pos.x), static_cast<float>(world_pos.z)) + 1.0f)
+                    / 2.0f * static_cast<float>(Renderer::CHUNK_HEIGHT-1));
+                uint32_t y = 0;
+                for (; y < grass_height; y++) {
+                    chunk.set_block({x, y, z}, y < (grass_height-1)/2 ? Renderer::BLOCK::STONE : Renderer::BLOCK::DIRT);
                 }
-                chunk.set_block(Vector3{(float) x, (float) y, (float) z}, Renderer::BLOCK::GRASS);
-                Physics::add_static_cube(btVector3(chunk_pos.x* Renderer::CHUNK_SIZE + (float) x,
-                    (float) y,
-                    chunk_pos.y* Renderer::CHUNK_SIZE + (float) z));
+                chunk.set_block({x, y, z}, Renderer::BLOCK::GRASS);
+                world_pos.y = static_cast<int32_t>(y);
+                Physics::add_static_cube(world_pos);
             }
         }
     }
@@ -30,9 +29,9 @@ namespace Generator
         for (int x = -Renderer::WORLD_SIZE; x <= Renderer::WORLD_SIZE; x++) {
             for (int z = -Renderer::WORLD_SIZE; z <= Renderer::WORLD_SIZE; z++) {
                 Renderer::Chunk chunk;
-                const Vector2 chunk_pos((float) x, (float) z);
+                const Renderer::ChunkPos chunk_pos{x, z};
                 generate_chunk(chunk, chunk_pos);
-                Renderer::set_chunk(chunk, chunk_pos);
+                Renderer::add_chunk_to_world(chunk, chunk_pos);
             }
         }
     }

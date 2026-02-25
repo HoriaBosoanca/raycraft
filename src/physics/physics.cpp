@@ -1,6 +1,7 @@
 #include "physics.h"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
+#include "chunk.h"
 #include "raylib.h"
 
 namespace Physics
@@ -31,11 +32,11 @@ namespace Physics
         dynamicsWorld->addRigidBody(playerRb);
     }
 
-    void init() {
-        btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-        btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    void setup() {
+        auto* collisionConfiguration = new btDefaultCollisionConfiguration();
+        auto* dispatcher = new btCollisionDispatcher(collisionConfiguration);
         btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
-        btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+        auto* solver = new btSequentialImpulseConstraintSolver;
         dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
         dynamicsWorld->setGravity(btVector3(0.0f, -20.0f, 0.0f));
         init_player();
@@ -47,12 +48,12 @@ namespace Physics
         }
     }
 
-    void add_static_cube(const btVector3 pos) {
+    void add_static_cube(const Renderer::WorldPos world_pos) {
         btCollisionShape* cube = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
         collisionShapes.push_back(cube);
         btTransform transform;
         transform.setIdentity();
-        transform.setOrigin(pos);
+        transform.setOrigin(btVector3{static_cast<float>(world_pos.x), static_cast<float>(world_pos.y), static_cast<float>(world_pos.z)});
         const btRigidBody::btRigidBodyConstructionInfo rbInfo(
             0.0f,
             new btDefaultMotionState(transform),

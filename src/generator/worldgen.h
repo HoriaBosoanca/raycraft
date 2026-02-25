@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Generator
+namespace WorldGen
 {
     void generate_world();
 }
