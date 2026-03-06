@@ -8,7 +8,7 @@ namespace Physics
     extern bool STEP_PHYSICS;
     void setup();
     void update();
-    void add_static_cube(Renderer::WorldPos world_pos);
+    void add_block(Renderer::WorldPos world_pos);
     btVector3 get_player_pos();
     btVector3 get_player_velocity();
     void set_player_velocity(btVector3 vel);

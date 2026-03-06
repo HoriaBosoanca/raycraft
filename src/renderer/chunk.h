@@ -25,6 +25,7 @@ namespace Renderer
         int32_t x, z;
         ChunkPos operator+(const ChunkPos& other) const;
         WorldPos operator+(const LocalPos& other) const;
+        bool operator<(const ChunkPos& other) const;
     };
     struct WorldPos {
         int32_t x, y, z;
@@ -32,6 +33,7 @@ namespace Renderer
         WorldPos operator+(const WorldPos& other) const;
         LocalPos get_local_pos() const;
         ChunkPos get_chunk_pos() const;
+        bool operator<(const WorldPos& other) const;
     };
 
     class Chunk {

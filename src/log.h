@@ -18,5 +18,5 @@ inline void draw_debug_menu() {
         getMemoryKB()/1024
         ), 10, 60, 20, BLACK);
     const btVector3 pos = Physics::get_player_pos();
-    DrawText(TextFormat("Physics X: %f,\nY: %f,\nZ: %f", pos.x(), pos.y(), pos.z()), 10, 150, 20, BLACK);
+    DrawText(TextFormat("X: %f,\nY: %f,\nZ: %f", pos.x(), pos.y(), pos.z()), 10, 150, 20, BLACK);
 }

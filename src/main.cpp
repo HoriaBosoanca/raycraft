@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "raylib.h"
 #include "player.h"
 #include "physics.h"
@@ -9,8 +7,8 @@
 #include "worldgen.h"
 
 void setup() {
-    Physics::setup();
     WorldGen::generate_world();
+    Physics::setup();
     Renderer::load_textures();
     Renderer::build_world_models();
     Player::init();

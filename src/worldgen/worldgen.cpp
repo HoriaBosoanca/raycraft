@@ -14,12 +14,11 @@ namespace WorldGen
                 const auto grass_height = static_cast<uint32_t>((noise.GetNoise(static_cast<float>(world_pos.x), static_cast<float>(world_pos.z)) + 1.0f)
                     / 2.0f * static_cast<float>(Renderer::CHUNK_HEIGHT-1));
                 uint32_t y = 0;
-                for (; y < grass_height; y++) {
+                for (; y < grass_height; y++)
                     chunk.set_block({x, y, z}, y < (grass_height-1)/2 ? Renderer::BLOCK::STONE : Renderer::BLOCK::DIRT);
-                }
                 chunk.set_block({x, y, z}, Renderer::BLOCK::GRASS);
                 world_pos.y = static_cast<int32_t>(y);
-                Physics::add_static_cube(world_pos);
+                Physics::add_block(world_pos);
             }
         }
     }

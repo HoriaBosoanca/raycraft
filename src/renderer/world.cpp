@@ -4,7 +4,7 @@
 
 namespace Renderer
 {
-    std::unordered_map<ChunkPos, Chunk, ChunkPosHash, ChunkPosEqual> world;
+    std::map<ChunkPos, Chunk> world;
     const int32_t WORLD_SIZE = 6;
     void render_world() {
         for (int32_t x = -WORLD_SIZE; x <= WORLD_SIZE; x++) {

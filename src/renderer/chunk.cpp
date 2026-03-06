@@ -18,6 +18,10 @@ namespace Renderer
             static_cast<int32_t>(other.y),
             z * CHUNK_SIZE + static_cast<int32_t>(other.z)};
     }
+    bool ChunkPos::operator<(const ChunkPos& other) const {
+        if (x != other.x) return x < other.x;
+        return z < other.z;
+    }
     WorldPos WorldPos::operator+(const WorldPos& other) const {
         return {x + static_cast<int32_t>(other.x), y + other.y, z + static_cast<int32_t>(other.z)};
     }
@@ -33,6 +37,11 @@ namespace Renderer
     }
     ChunkPos WorldPos::get_chunk_pos() const {
         return ChunkPos{floor_div(x), floor_div(z)};
+    }
+    bool WorldPos::operator<(const WorldPos& other) const {
+        if (x != other.x) return x < other.x;
+        if (y != other.y) return y < other.y;
+        return z < other.z;
     }
 
     void Chunk::set_block(const LocalPos local_pos, const BLOCK block) {
