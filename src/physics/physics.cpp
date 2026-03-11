@@ -1,22 +1,21 @@
 #include "physics.h"
-#include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
-#include "chunk.h"
 #include "raylib.h"
+#include "world.h"
 
 namespace Physics
 {
     bool STEP_PHYSICS = false;
-
-    btDiscreteDynamicsWorld* dynamicsWorld;
-    auto world_sh = new btCompoundShape();
+    constexpr float W_PLAYER = 0.45f,
+                    W_WALK_PLAYER = 0.40f,
+                    H_PLAYER = 1.0f,
+                    GRAVITY = -20.0f;
+    btDynamicsWorld* dynamics_world;
     btRigidBody* player_rb;
-    btCollisionShape* cube_sh = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
 
-    void init_dyna_world() {
+    void init_dynamics_world() {
         auto* cfg = new btDefaultCollisionConfiguration();
-        dynamicsWorld = new btDiscreteDynamicsWorld(new btCollisionDispatcher(cfg), new btDbvtBroadphase(), new btSequentialImpulseConstraintSolver(), cfg);
-        dynamicsWorld->setGravity(btVector3(0.0f, -20.0f, 0.0f));
+        dynamics_world = new btDiscreteDynamicsWorld(new btCollisionDispatcher(cfg), new btDbvtBroadphase(), new btSequentialImpulseConstraintSolver(), cfg);
+        dynamics_world->setGravity(btVector3(0.0f, GRAVITY, 0.0f));
     }
 
     void init_player_rb() {
@@ -26,41 +25,23 @@ namespace Physics
         const btRigidBody::btRigidBodyConstructionInfo rbInfo(
             1.0f,
             new btDefaultMotionState(t),
-            new btBoxShape(btVector3(0.5f, 1.0f, 0.5f))
+            new btBoxShape(btVector3(W_PLAYER, H_PLAYER, W_PLAYER))
         );
         player_rb = new btRigidBody(rbInfo);
         player_rb->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
         player_rb->setFriction(0.0f);
-        dynamicsWorld->addRigidBody(player_rb);
+        dynamics_world->addRigidBody(player_rb);
     }
 
-    void init_world_rb() {
-        btTransform t;
-        t.setIdentity();
-        dynamicsWorld->addRigidBody(new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(
-            0.0f,
-            new btDefaultMotionState(t),
-            world_sh
-        )));
-    }
-
-    void setup() {
-        init_dyna_world();
-        init_world_rb();
+    void init() {
+        init_dynamics_world();
         init_player_rb();
     }
 
     void update() {
         if (STEP_PHYSICS) {
-            dynamicsWorld->stepSimulation(GetFrameTime(), 20);
+            dynamics_world->stepSimulation(GetFrameTime(), 20);
         }
-    }
-
-    void add_block(const Renderer::WorldPos world_pos) {
-        btTransform t;
-        t.setIdentity();
-        t.setOrigin(btVector3{static_cast<float>(world_pos.x), static_cast<float>(world_pos.y), static_cast<float>(world_pos.z)});
-        world_sh->addChildShape(t, cube_sh);
     }
 
     btVector3 get_player_pos() {
@@ -75,11 +56,31 @@ namespace Physics
         player_rb->setLinearVelocity(vel);
     }
 
+    btVector3 offsets[4] = {{-W_WALK_PLAYER, 0.0f, -W_WALK_PLAYER},
+                            {-W_WALK_PLAYER, 0.0f, W_WALK_PLAYER},
+                            {W_WALK_PLAYER, 0.0f, -W_WALK_PLAYER},
+                            {W_WALK_PLAYER, 0.0f, W_WALK_PLAYER}};
     bool is_player_grounded() {
-        const btVector3 from = get_player_pos();
-        const btVector3 to = from + btVector3(0.0f, -1.0f, 0.0f);
+        const btVector3 player = get_player_pos();
+        for (btVector3& offset : offsets) {
+            const btVector3 from = player + offset;
+            const btVector3 to = from + btVector3(0.0f, -1.0f, 0.0f);
+            btCollisionWorld::ClosestRayResultCallback ray(from, to);
+            dynamics_world->rayTest(from, to, ray);
+            if (ray.hasHit()) return true;
+        }
+        return false;
+    }
+
+    void player_set_target_block(World::BLOCK block, const btVector3 from, btVector3 to, const float reach_dist) {
+        to = from+(to-from).normalize()*reach_dist;
         btCollisionWorld::ClosestRayResultCallback ray(from, to);
-        dynamicsWorld->rayTest(from, to, ray);
-        return ray.hasHit();
+        dynamics_world->rayTest(from, to, ray);
+        if (ray.hasHit()) {
+            const auto hit = ray.m_hitPointWorld;
+            const World::WorldPos world_pos = {static_cast<int32_t>(floor(hit.x())), static_cast<int32_t>(floor(hit.y())), static_cast<int32_t>(floor(hit.z()))};
+            World::set_block(world_pos, block);
+            World::build_chunk(world_pos.get_chunk_pos());
+        }
     }
 }

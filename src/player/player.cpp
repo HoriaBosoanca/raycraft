@@ -75,17 +75,17 @@ namespace Player
         }
     }
 
-    void update() {
-        if (Physics::STEP_PHYSICS) {
-            move();
-        } else {
-            freecam();
+    constexpr float PLAYER_REACH = 5.0f;
+    void interact() {
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            const auto from = btVector3{camera.position.x, camera.position.y, camera.position.z},
+                       to   = btVector3{camera.target.x, camera.target.y, camera.target.z};
+            Physics::player_set_target_block(World::BLOCK::AIR, from, to, PLAYER_REACH);
         }
-        UpdateCamera(&camera, CAMERA_FIRST_PERSON);
     }
 
     bool cursor_enabled = false;
-    void update_options() {
+    void update() {
         if (IsKeyPressed(KEY_F11)) {
             ToggleFullscreen();
         }
@@ -100,5 +100,13 @@ namespace Player
         if (IsKeyPressed(KEY_F9)) {
             Physics::STEP_PHYSICS = !Physics::STEP_PHYSICS;
         }
+
+        if (Physics::STEP_PHYSICS) {
+            move();
+            interact();
+        } else {
+            freecam();
+        }
+        UpdateCamera(&camera, CAMERA_FIRST_PERSON);
     }
 }

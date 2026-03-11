@@ -2,9 +2,10 @@
 
 #include <map>
 #include <array>
-#include <cstdint>
+#include "chunk.h"
+#include "raylib.h"
 
-namespace Renderer
+namespace MeshGen
 {
     inline Mesh cube;
     inline Material default_mat;
@@ -23,17 +24,10 @@ namespace Renderer
     inline auto DIRT = Vector2{1.0f, 7.0f};
     inline auto STONE = Vector2{4.0f, 6.0f};
 
-    enum class BLOCK : uint8_t {
-        AIR,
-        GRASS,
-        DIRT,
-        STONE
-    };
-
-    inline std::map<BLOCK, std::array<Vector2, 6>> t_map = {
-        {BLOCK::AIR,   {AIR, AIR, AIR, AIR, AIR, AIR}},
-        {BLOCK::GRASS, {GRASS_SIDE, GRASS_SIDE, GRASS_TOP, DIRT, GRASS_SIDE, GRASS_SIDE}},
-        {BLOCK::DIRT,  {DIRT, DIRT, DIRT, DIRT, DIRT, DIRT}},
-        {BLOCK::STONE, {STONE, STONE, STONE, STONE, STONE, STONE}}
+    inline std::map<World::BLOCK, std::array<Vector2, 6>> t_map = {
+        {World::BLOCK::AIR,   {AIR, AIR, AIR, AIR, AIR, AIR}},
+        {World::BLOCK::GRASS, {GRASS_SIDE, GRASS_SIDE, GRASS_TOP, DIRT, GRASS_SIDE, GRASS_SIDE}},
+        {World::BLOCK::DIRT,  {DIRT, DIRT, DIRT, DIRT, DIRT, DIRT}},
+        {World::BLOCK::STONE, {STONE, STONE, STONE, STONE, STONE, STONE}}
     };
 }

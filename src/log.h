@@ -17,6 +17,6 @@ inline void draw_debug_menu() {
         getMemoryKB(),
         getMemoryKB()/1024
         ), 10, 60, 20, BLACK);
-    const btVector3 pos = Physics::get_player_pos();
-    DrawText(TextFormat("X: %f,\nY: %f,\nZ: %f", pos.x(), pos.y(), pos.z()), 10, 150, 20, BLACK);
+    const auto [x, y, z] = Player::camera.position;
+    DrawText(TextFormat("X: %f,\nY: %f,\nZ: %f", x, y, z), 10, 150, 20, BLACK);
 }

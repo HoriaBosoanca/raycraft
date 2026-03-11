@@ -1,10 +1,8 @@
 #pragma once
 
-#include <vector>
-#include "raylib.h"
-#include "textures.h"
+#include <cstdint>
 
-namespace Renderer
+namespace World
 {
     constexpr uint32_t U_CHUNK_SIZE = 16;
     constexpr uint32_t U_CHUNK_HEIGHT = 32;
@@ -19,7 +17,6 @@ namespace Renderer
             y = _y % U_CHUNK_HEIGHT;
             z = _z % U_CHUNK_SIZE;
         }
-        // LocalPos operator+(const LocalPos& other) const;
     };
     struct ChunkPos {
         int32_t x, z;
@@ -36,33 +33,18 @@ namespace Renderer
         bool operator<(const WorldPos& other) const;
     };
 
-    class Chunk {
+    enum class BLOCK : uint8_t {
+        AIR,
+        GRASS,
+        DIRT,
+        STONE
+    };
+
+    class ChunkData {
     public:
-        // data
         void set_block(LocalPos local_pos, BLOCK block);
         BLOCK get_block(LocalPos local_pos) const;
-        // model
-        void build_model(ChunkPos chunk_pos);
-        void draw_model(WorldPos world_pos) const;
-
     private:
-        // data
         BLOCK blocks[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE]{};
-        bool is_block_surrounded(LocalPos local_pos) const;
-        // model
-        Model model{};
-        int vertexCount1 = 0;
-        int vertexCount2 = 0;
-        int triangleCount1 = 0;
-        int triangleCount2 = 0;
-        std::vector<float> vertices1;
-        std::vector<float> vertices2;
-        std::vector<unsigned short> indices1;
-        std::vector<unsigned short> indices2;
-        std::vector<float> normals1;
-        std::vector<float> normals2;
-        std::vector<float> texcoords1;
-        std::vector<float> texcoords2;
-        void add_block_to_model(LocalPos local_pos, BLOCK block);
     };
 }
