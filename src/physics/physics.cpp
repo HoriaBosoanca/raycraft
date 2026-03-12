@@ -30,6 +30,7 @@ namespace Physics
         player_rb = new btRigidBody(rbInfo);
         player_rb->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
         player_rb->setFriction(0.0f);
+        player_rb->setActivationState(DISABLE_DEACTIVATION);
         dynamics_world->addRigidBody(player_rb);
     }
 
@@ -72,13 +73,15 @@ namespace Physics
         return false;
     }
 
-    void player_set_target_block(World::BLOCK block, const btVector3 from, btVector3 to, const float reach_dist) {
-        to = from+(to-from).normalize()*reach_dist;
+    void player_set_target_block(const World::BLOCK block, const btVector3 from, btVector3 to, const float reach_dist) {
+        btVector3 dir = to-from;
+        dir.normalize();
+        to = from+dir*reach_dist;
         btCollisionWorld::ClosestRayResultCallback ray(from, to);
         dynamics_world->rayTest(from, to, ray);
         if (ray.hasHit()) {
-            const auto hit = ray.m_hitPointWorld;
-            const World::WorldPos world_pos = {static_cast<int32_t>(floor(hit.x())), static_cast<int32_t>(floor(hit.y())), static_cast<int32_t>(floor(hit.z()))};
+            const auto hit = ray.m_hitPointWorld - ray.m_hitNormalWorld * 0.1f;
+            const World::WorldPos world_pos = {static_cast<int32_t>(round(hit.x())), static_cast<int32_t>(round(hit.y())), static_cast<int32_t>(round(hit.z()))};
             World::set_block(world_pos, block);
             World::build_chunk(world_pos.get_chunk_pos());
         }

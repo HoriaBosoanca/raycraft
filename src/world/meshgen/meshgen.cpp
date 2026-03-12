@@ -94,6 +94,10 @@ namespace MeshGen
 		indices1.clear();
 		indices2.clear();
 
+		delete[] model.meshes;
+		delete[] model.materials;
+		delete[] model.meshMaterial;
+
 		model = {};
 		model.transform = MatrixIdentity();
 		model.meshCount = 2;
