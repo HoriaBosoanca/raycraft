@@ -1,4 +1,5 @@
 #include "meshgen.h"
+#include <climits>
 #include "chunk.h"
 #include "raylib.h"
 #include "raymath.h"
