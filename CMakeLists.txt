@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 project(raycppcraft)
 
 set(CMAKE_CXX_STANDARD 23)
-#set(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 file(GLOB SOURCES CONFIGURE_DEPENDS
         src/*.cpp
         src/world/meshgen/*.cpp
