@@ -53,7 +53,27 @@ namespace MeshGen
 	}
 
 	void ChunkModel::build_model(const World::ChunkData& chunk_data, const World::ChunkPos chunk_pos) {
-		Mesh mesh1 = {}, mesh2 = {};
+		if (model.meshes == nullptr) {
+			model.transform = MatrixIdentity();
+			model.meshCount = 2;
+			model.meshes = new Mesh[2];
+			model.materialCount = 1;
+			model.materials = new Material[1];
+			model.meshMaterial = new int[2];
+			model.materials[0] = default_mat;
+			model.meshMaterial[0] = 0;
+			model.meshMaterial[1] = 0;
+			model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = ATLAS;
+		} else {
+			if (model.meshes[0].vertices != nullptr) {
+				UnloadMesh(model.meshes[0]);
+			}
+			if (model.meshes[1].vertices != nullptr) {
+				UnloadMesh(model.meshes[1]);
+			}
+		}
+
+		Mesh& mesh1 = model.meshes[0] = {}, mesh2 = model.meshes[1] = {};
 
 		for (uint32_t x = 0; x < World::CHUNK_SIZE; x++) {
 			for (uint32_t y = 0; y < World::CHUNK_HEIGHT; y++) {
@@ -67,51 +87,50 @@ namespace MeshGen
 		}
 
 		mesh1.vertexCount = vertexCount1;
+		vertexCount1 = 0;
 		mesh1.triangleCount = triangleCount1;
-		mesh1.vertices = vertices1.data();
-		mesh1.normals = normals1.data();
-		mesh1.texcoords = texcoords1.data();
-		mesh1.indices = indices1.data();
+		triangleCount1 = 0;
+		mesh1.vertices = static_cast<float*>(RL_MALLOC(vertices1.size() * sizeof(float)));
+		std::copy(vertices1.begin(), vertices1.end(), mesh1.vertices);
+		vertices1.clear();
+		vertices1.shrink_to_fit();
+		mesh1.normals = static_cast<float*>(RL_MALLOC(normals1.size() * sizeof(float)));
+		std::copy(normals1.begin(), normals1.end(), mesh1.normals);
+		normals1.clear();
+		normals1.shrink_to_fit();
+		mesh1.texcoords = static_cast<float*>(RL_MALLOC(texcoords1.size() * sizeof(float)));
+		std::copy(texcoords1.begin(), texcoords1.end(), mesh1.texcoords);
+		texcoords1.clear();
+		texcoords1.shrink_to_fit();
+		mesh1.indices = static_cast<unsigned short*>(RL_MALLOC(indices1.size() * sizeof(unsigned short)));
+		std::copy(indices1.begin(), indices1.end(), mesh1.indices);
+		indices1.clear();
+		indices1.shrink_to_fit();
 		UploadMesh(&mesh1, false);
 
-		mesh2.vertexCount = vertexCount2;
-		mesh2.triangleCount = triangleCount2;
-		mesh2.vertices = vertices2.data();
-		mesh2.normals = normals2.data();
-		mesh2.texcoords = texcoords2.data();
-		mesh2.indices = indices2.data();
-		UploadMesh(&mesh2, false);
-
-		vertexCount1 = 0;
-		vertexCount2 = 0;
-		triangleCount1 = 0;
-		triangleCount2 = 0;
-		vertices1.clear();
-		vertices2.clear();
-		normals1.clear();
-		normals2.clear();
-		texcoords1.clear();
-		texcoords2.clear();
-		indices1.clear();
-		indices2.clear();
-
-		delete[] model.meshes;
-		delete[] model.materials;
-		delete[] model.meshMaterial;
-
-		model = {};
-		model.transform = MatrixIdentity();
-		model.meshCount = 2;
-		model.meshes = new Mesh[2];
-		model.meshes[0] = mesh1;
-		model.meshes[1] = mesh2;
-		model.materialCount = 1;
-		model.materials = new Material[1];
-		model.materials[0] = default_mat;
-		model.meshMaterial = new int[2];
-		model.meshMaterial[0] = 0;
-		model.meshMaterial[1] = 0;
-		model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = ATLAS;
+		if (vertexCount2 > 0) {
+			mesh2.vertexCount = vertexCount2;
+			vertexCount2 = 0;
+			mesh2.triangleCount = triangleCount2;
+			triangleCount2 = 0;
+			mesh2.vertices = static_cast<float*>(RL_MALLOC(vertices2.size() * sizeof(float)));
+			std::copy(vertices2.begin(), vertices2.end(), mesh2.vertices);
+			vertices2.clear();
+			vertices2.shrink_to_fit();
+			mesh2.normals = static_cast<float*>(RL_MALLOC(normals2.size() * sizeof(float)));
+			std::copy(normals2.begin(), normals2.end(), mesh2.normals);
+			normals2.clear();
+			normals2.shrink_to_fit();
+			mesh2.texcoords = static_cast<float*>(RL_MALLOC(texcoords2.size() * sizeof(float)));
+			std::copy(texcoords2.begin(), texcoords2.end(), mesh2.texcoords);
+			texcoords2.clear();
+			texcoords2.shrink_to_fit();
+			mesh2.indices = static_cast<unsigned short*>(RL_MALLOC(indices2.size() * sizeof(unsigned short)));
+			std::copy(indices2.begin(), indices2.end(), mesh2.indices);
+			indices2.clear();
+			indices2.shrink_to_fit();
+			UploadMesh(&mesh2, false);
+		}
 	}
 
 	void ChunkModel::render(const World::ChunkPos chunk_pos) const {

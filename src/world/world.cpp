@@ -1,6 +1,4 @@
 #include "world.h"
-
-#include <iostream>
 #include <ranges>
 #include "chunk.h"
 #include "rbgen.h"
