@@ -13,5 +13,5 @@ namespace Physics
     btVector3 get_player_velocity();
     void set_player_velocity(btVector3 vel);
     bool is_player_grounded();
-    void player_set_target_block(World::BLOCK block, btVector3 from, btVector3 to, float reach_dist);
+    void player_set_target_block(World::BLOCK block, btVector3 from, btVector3 to, float reach_dist, bool replace);
 }

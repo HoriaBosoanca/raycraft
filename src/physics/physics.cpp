@@ -73,14 +73,14 @@ namespace Physics
         return false;
     }
 
-    void player_set_target_block(const World::BLOCK block, const btVector3 from, btVector3 to, const float reach_dist) {
+    void player_set_target_block(const World::BLOCK block, const btVector3 from, btVector3 to, const float reach_dist, const bool replace) {
         btVector3 dir = to-from;
         dir.normalize();
         to = from+dir*reach_dist;
         btCollisionWorld::ClosestRayResultCallback ray(from, to);
         dynamics_world->rayTest(from, to, ray);
         if (ray.hasHit()) {
-            const auto hit = ray.m_hitPointWorld - ray.m_hitNormalWorld * 0.1f;
+            const auto hit = ray.m_hitPointWorld + (replace ? -1.0f : 1.0f) * ray.m_hitNormalWorld * 0.1f;
             const World::WorldPos world_pos = {static_cast<int32_t>(round(hit.x())), static_cast<int32_t>(round(hit.y())), static_cast<int32_t>(round(hit.z()))};
             World::set_block(world_pos, block);
             World::build_chunk(world_pos.get_chunk_pos());

@@ -77,10 +77,13 @@ namespace Player
 
     constexpr float PLAYER_REACH = 5.0f;
     void interact() {
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            const auto from = btVector3{camera.position.x, camera.position.y, camera.position.z},
-                       to   = btVector3{camera.target.x, camera.target.y, camera.target.z};
-            Physics::player_set_target_block(World::BLOCK::AIR, from, to, PLAYER_REACH);
+        const auto from = btVector3{camera.position.x, camera.position.y, camera.position.z},
+                   to   = btVector3{camera.target.x, camera.target.y, camera.target.z};
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            Physics::player_set_target_block(World::BLOCK::AIR, from, to, PLAYER_REACH, true);
+        }
+        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+            Physics::player_set_target_block(World::BLOCK::STONE, from, to, PLAYER_REACH, false);
         }
     }
 
