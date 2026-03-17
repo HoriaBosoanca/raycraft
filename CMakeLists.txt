@@ -10,9 +10,8 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
         src/world/meshgen/*.cpp
         src/world/rbgen/*.cpp
         src/world/*.cpp
-        src/physics/*.cpp
         src/player/*.cpp
-        src/world/worldgen/*.cpp
+        src/worldgen/*.cpp
 )
 add_executable(raycppcraft ${SOURCES})
 add_subdirectory(lib/raylib-5.5)
@@ -22,9 +21,8 @@ target_include_directories(raycppcraft PRIVATE
         src/world/meshgen
         src/world/rbgen
         src/world
-        src/physics
         src/player
-        src/world/worldgen
+        src/worldgen
         lib/FastNoiseLite/include
         lib/FastNoiseLite/include/physics
         lib/FastNoiseLite/include/renderer

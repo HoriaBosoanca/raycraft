@@ -28,7 +28,7 @@ namespace World
         build_chunks();
     }
 
-    bool STEP_PHYSICS = false;
+    bool STEP_PHYSICS = true;
     void render() {
         for (const auto& [chunk_pos, chunk] : world) {
             chunk.chunk_model.render(chunk_pos);

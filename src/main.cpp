@@ -19,7 +19,7 @@ int main() {
     setup();
     while (!WindowShouldClose()) {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(SKYBLUE);
         BeginMode3D(Player::camera);
         update();
         EndMode3D();
