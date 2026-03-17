@@ -20,7 +20,7 @@ namespace MeshGen
 		std::vector<float> normals2;
 		std::vector<float> texcoords1;
 		std::vector<float> texcoords2;
-		void build_model(const World::ChunkData& chunk_data, World::ChunkPos chunk_pos);
+		void rebuild_model(const World::ChunkData& chunk_data, World::ChunkPos chunk_pos);
 		void render(World::ChunkPos chunk_pos) const;
 	private:
 		void add_block_to_mesh(World::LocalPos local_pos, World::BLOCK block);

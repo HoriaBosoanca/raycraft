@@ -1,21 +1,16 @@
 #include "raylib.h"
 #include "player.h"
-#include "physics.h"
 #include "world.h"
-#include "textures.h"
 #include "log.h"
 
 void setup() {
-    Physics::init();
-    Player::init();
-    World::generate();
-    World::build_chunks();
+    World::setup();
+    Player::setup();
 }
 
 void update() {
-    Physics::update();
+    World::update();
     Player::update();
-    World::render();
 }
 
 int main() {

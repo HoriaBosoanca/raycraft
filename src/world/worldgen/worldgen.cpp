@@ -1,6 +1,5 @@
 #include "chunk.h"
 #include "FastNoiseLite.h"
-#include "physics.h"
 #include "world.h"
 
 namespace WorldGen

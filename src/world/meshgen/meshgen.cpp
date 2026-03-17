@@ -52,7 +52,7 @@ namespace MeshGen
         }
 	}
 
-	void ChunkModel::build_model(const World::ChunkData& chunk_data, const World::ChunkPos chunk_pos) {
+	void ChunkModel::rebuild_model(const World::ChunkData& chunk_data, const World::ChunkPos chunk_pos) {
 		if (model.meshes == nullptr) {
 			model.transform = MatrixIdentity();
 			model.meshCount = 2;

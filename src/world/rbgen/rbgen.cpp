@@ -1,14 +1,11 @@
 #include "rbgen.h"
-
-#include <iostream>
-
-#include "physics.h"
+#include "world.h"
 
 namespace RbGen {
 	auto* cube_sh = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
 	void remove_rb(btRigidBody* rb) {
 		if (rb != nullptr) {
-			Physics::dynamics_world->removeRigidBody(rb);
+			World::dynamics_world->removeRigidBody(rb);
 			delete rb->getMotionState();
 			delete rb->getCollisionShape();
 			delete rb;
@@ -36,7 +33,7 @@ namespace RbGen {
 			new btDefaultMotionState(t),
 			chunk_shape
 		));
-		Physics::dynamics_world->addRigidBody(chunk_rb);
+		World::dynamics_world->addRigidBody(chunk_rb);
 		return chunk_rb;
 	}
 }

@@ -15,12 +15,13 @@ namespace World
 
     constexpr int32_t WORLD_SIZE = 6;
     extern std::map<ChunkPos, Chunk> world;
+    extern bool STEP_PHYSICS;
+    extern btDynamicsWorld* dynamics_world;
+    void setup();
+    void update();
 
-    void generate();
+    void build_chunk(ChunkPos chunk_pos);
     BLOCK get_block(WorldPos world_pos);
     void set_block(WorldPos world_pos, BLOCK block);
-    void render();
-    void build_chunk(ChunkPos chunk_pos);
-    void build_chunks();
     bool is_block_surrounded(WorldPos world_pos);
 }

@@ -1,14 +1,16 @@
-#include "raylib.h"
+#include "player.h"
 #include "raymath.h"
-#include "physics.h"
+#include "btBulletDynamicsCommon.h"
+#include "world.h"
 
 namespace Player
 {
     Camera camera;
 
-    void init() {
+    void setup() {
+        setup_player_rb();
         DisableCursor();
-        const btVector3 pos = Physics::get_player_pos();
+        const btVector3 pos = get_player_pos();
         camera.position = {pos.x(), pos.y(), pos.z()};
         camera.target = {1.0f, 0.0f, 1.0f};
         camera.up = {0.0f, 1.0f, 0.0f};
@@ -19,7 +21,7 @@ namespace Player
     constexpr float JUMP_FORCE = 7.0f;
     constexpr float MOVE_SPEED = 3.5f;
     void move() {
-        const btVector3 pos = Physics::get_player_pos();
+        const btVector3 pos = Player::get_player_pos();
         const auto [off_X, off_y, off_z] = camera.target - camera.position;
         camera.position = Vector3(pos.x(), pos.y()+0.5f, pos.z());
         camera.target = Vector3(pos.x()+off_X, pos.y()+off_y+0.5f, pos.z()+off_z);
@@ -39,9 +41,9 @@ namespace Player
         }
         mov = Vector2Normalize(mov) * MOVE_SPEED;
         const btVector3 final_mov(mov.x,
-            IsKeyDown(KEY_SPACE) && Physics::is_player_grounded() ? JUMP_FORCE : Physics::get_player_velocity().y(),
+            IsKeyDown(KEY_SPACE) && is_player_grounded() ? JUMP_FORCE : get_player_velocity().y(),
             mov.y);
-        Physics::set_player_velocity(final_mov);
+        set_player_velocity(final_mov);
     }
 
     constexpr float ASCEND_SPEED = 30.0f;
@@ -80,10 +82,10 @@ namespace Player
         const auto from = btVector3{camera.position.x, camera.position.y, camera.position.z},
                    to   = btVector3{camera.target.x, camera.target.y, camera.target.z};
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            Physics::player_set_target_block(World::BLOCK::AIR, from, to, PLAYER_REACH, true);
+            player_set_target_block(World::BLOCK::AIR, from, to, PLAYER_REACH, true);
         }
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            Physics::player_set_target_block(World::BLOCK::STONE, from, to, PLAYER_REACH, false);
+            player_set_target_block(World::BLOCK::STONE, from, to, PLAYER_REACH, false);
         }
     }
 
@@ -101,10 +103,10 @@ namespace Player
             cursor_enabled = !cursor_enabled;
         }
         if (IsKeyPressed(KEY_F9)) {
-            Physics::STEP_PHYSICS = !Physics::STEP_PHYSICS;
+            World::STEP_PHYSICS = !World::STEP_PHYSICS;
         }
 
-        if (Physics::STEP_PHYSICS) {
+        if (World::STEP_PHYSICS) {
             move();
             interact();
         } else {
