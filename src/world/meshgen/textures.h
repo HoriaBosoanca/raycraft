@@ -18,16 +18,23 @@ namespace MeshGen
         cube = GenMeshCube(1.0f, 1.0f, 1.0f);
     }
 
-    inline auto AIR = Vector2{2.0f, 6.0f};
-    inline auto GRASS_TOP = Vector2{0.0f, 7.0f};
-    inline auto GRASS_SIDE = Vector2{0.0f, 6.0f};
-    inline auto DIRT = Vector2{1.0f, 7.0f};
-    inline auto STONE = Vector2{4.0f, 6.0f};
+    inline auto AIR = Vector2{2.0f, 6.0f},
+                GRASS_TOP = Vector2{0.0f, 7.0f},
+                GRASS_SIDE = Vector2{0.0f, 6.0f},
+                DIRT = Vector2{1.0f, 7.0f},
+                STONE = Vector2{4.0f, 6.0f},
+                OAK_PLANKS = Vector2{7.0f, 7.0f},
+                OAK_LOG_SIDE = Vector2{6.0f, 6.0f},
+                OAK_LOG_TOP = Vector2{6.0f, 7.0f},
+                OAK_LEAVES = Vector2{7.0f, 6.0f};
 
     inline std::map<World::BLOCK, std::array<Vector2, 6>> t_map = {
         {World::BLOCK::AIR,   {AIR, AIR, AIR, AIR, AIR, AIR}},
         {World::BLOCK::GRASS, {GRASS_SIDE, GRASS_SIDE, GRASS_TOP, DIRT, GRASS_SIDE, GRASS_SIDE}},
         {World::BLOCK::DIRT,  {DIRT, DIRT, DIRT, DIRT, DIRT, DIRT}},
-        {World::BLOCK::STONE, {STONE, STONE, STONE, STONE, STONE, STONE}}
+        {World::BLOCK::STONE, {STONE, STONE, STONE, STONE, STONE, STONE}},
+        {World::BLOCK::OAK_PLANKS, {OAK_PLANKS, OAK_PLANKS, OAK_PLANKS, OAK_PLANKS, OAK_PLANKS, OAK_PLANKS}},
+        {World::BLOCK::OAK_LOG, {OAK_LOG_SIDE, OAK_LOG_SIDE, OAK_LOG_TOP, OAK_LOG_TOP, OAK_LOG_SIDE, OAK_LOG_SIDE}},
+        {World::BLOCK::OAK_LEAVES, {OAK_LEAVES, OAK_LEAVES, OAK_LEAVES, OAK_LEAVES, OAK_LEAVES, OAK_LEAVES}}
     };
 }

@@ -7,7 +7,7 @@ namespace World
     constexpr uint32_t U_CHUNK_SIZE = 16;
     constexpr uint32_t U_CHUNK_HEIGHT = 32;
     constexpr int32_t CHUNK_SIZE = 16;
-    constexpr int32_t CHUNK_HEIGHT = 32;
+    constexpr int32_t CHUNK_HEIGHT = 48;
 
     struct LocalPos; struct ChunkPos; struct WorldPos;
     struct LocalPos {
@@ -37,7 +37,10 @@ namespace World
         AIR,
         GRASS,
         DIRT,
-        STONE
+        STONE,
+        OAK_PLANKS,
+        OAK_LOG,
+        OAK_LEAVES
     };
 
     class ChunkData {

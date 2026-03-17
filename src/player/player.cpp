@@ -85,7 +85,7 @@ namespace Player
             player_set_target_block(World::BLOCK::AIR, from, to, PLAYER_REACH, true);
         }
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            player_set_target_block(World::BLOCK::STONE, from, to, PLAYER_REACH, false);
+            player_set_target_block(World::BLOCK::OAK_PLANKS, from, to, PLAYER_REACH, false);
         }
     }
 
