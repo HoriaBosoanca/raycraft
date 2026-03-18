@@ -20,9 +20,6 @@ namespace WorldGen
                       TREE_LEAF_W = 2,
                       TREE_LEAF_H = 2;
     void generate_tree(World::WorldPos world_pos) {
-        static int cnt;
-        cnt++;
-        std::cout << cnt << std::endl;
         for (const auto end_y = world_pos.y + TREE_H; world_pos.y < end_y; world_pos.y++) {
             World::set_block(world_pos, World::BLOCK::OAK_LOG);
         }

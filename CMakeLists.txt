@@ -7,8 +7,9 @@ if (WIN32)
 endif ()
 file(GLOB SOURCES CONFIGURE_DEPENDS
         src/*.cpp
-        src/world/meshgen/*.cpp
+        src/world/chunk_model/*.cpp
         src/world/rbgen/*.cpp
+        src/world/renderer/*.cpp
         src/world/*.cpp
         src/player/*.cpp
         src/worldgen/*.cpp
@@ -18,8 +19,9 @@ add_subdirectory(lib/raylib-5.5)
 add_subdirectory(lib/bullet3-3.25)
 target_include_directories(raycppcraft PRIVATE
         src
-        src/world/meshgen
+        src/world/chunk_model
         src/world/rbgen
+        src/world/renderer
         src/world
         src/player
         src/worldgen

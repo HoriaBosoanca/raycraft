@@ -11,7 +11,8 @@ namespace Player
     void setup_player_rb() {
         btTransform t;
         t.setIdentity();
-        t.setOrigin(btVector3(0.0f, 50.0f, 0.0f));
+        const auto [x, y, z] = camera.position;
+        t.setOrigin(btVector3(x, y, z));
         const btRigidBody::btRigidBodyConstructionInfo rbInfo(
             1.0f,
             new btDefaultMotionState(t),
@@ -24,7 +25,7 @@ namespace Player
         World::dynamics_world->addRigidBody(player_rb);
     }
 
-    btVector3 get_player_pos() {
+    btVector3 get_physics_player_pos() {
         return player_rb->getWorldTransform().getOrigin();
     }
 
@@ -41,7 +42,7 @@ namespace Player
                             {W_WALK_PLAYER, 0.0f, -W_WALK_PLAYER},
                             {W_WALK_PLAYER, 0.0f, W_WALK_PLAYER}};
     bool is_player_grounded() {
-        const btVector3 player = get_player_pos();
+        const btVector3 player = get_physics_player_pos();
         for (btVector3& offset : offsets) {
             const btVector3 from = player + offset;
             const btVector3 to = from + btVector3(0.0f, -1.0f, 0.0f);
@@ -62,7 +63,7 @@ namespace Player
             const auto hit = ray.m_hitPointWorld + (replace ? -1.0f : 1.0f) * ray.m_hitNormalWorld * 0.1f;
             const World::WorldPos world_pos = {static_cast<int32_t>(round(hit.x())), static_cast<int32_t>(round(hit.y())), static_cast<int32_t>(round(hit.z()))};
             World::set_block(world_pos, block);
-            World::build_chunk(world_pos.get_chunk_pos());
+            World::update_chunk_around_block(world_pos);
         }
     }
 }

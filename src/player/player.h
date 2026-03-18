@@ -10,7 +10,7 @@ namespace Player
     void setup();
     void update();
     void setup_player_rb();
-    btVector3 get_player_pos();
+    btVector3 get_physics_player_pos();
     btVector3 get_player_velocity();
     void set_player_velocity(btVector3 vel);
     bool is_player_grounded();

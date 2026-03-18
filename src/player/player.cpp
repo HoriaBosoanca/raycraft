@@ -8,20 +8,23 @@ namespace Player
     Camera camera;
 
     void setup() {
-        setup_player_rb();
         DisableCursor();
-        const btVector3 pos = get_player_pos();
-        camera.position = {pos.x(), pos.y(), pos.z()};
+        camera.position = {0.0f, 50.0f, 0.0f};
         camera.target = {1.0f, 0.0f, 1.0f};
         camera.up = {0.0f, 1.0f, 0.0f};
         camera.fovy = 90.0f;
         camera.projection = CAMERA_PERSPECTIVE;
+        setup_player_rb();
+    }
+
+    Vector3 get_player_pos() {
+        return camera.position;
     }
 
     constexpr float JUMP_FORCE = 7.0f;
     constexpr float MOVE_SPEED = 3.5f;
     void move() {
-        const btVector3 pos = Player::get_player_pos();
+        const btVector3 pos = Player::get_physics_player_pos();
         const auto [off_X, off_y, off_z] = camera.target - camera.position;
         camera.position = Vector3(pos.x(), pos.y()+0.5f, pos.z());
         camera.target = Vector3(pos.x()+off_X, pos.y()+off_y+0.5f, pos.z()+off_z);

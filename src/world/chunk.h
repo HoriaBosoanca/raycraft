@@ -5,9 +5,9 @@
 namespace World
 {
     constexpr uint32_t U_CHUNK_SIZE = 16;
-    constexpr uint32_t U_CHUNK_HEIGHT = 32;
+    constexpr uint32_t U_CHUNK_HEIGHT = 64;
     constexpr int32_t CHUNK_SIZE = 16;
-    constexpr int32_t CHUNK_HEIGHT = 48;
+    constexpr int32_t CHUNK_HEIGHT = 64;
 
     struct LocalPos; struct ChunkPos; struct WorldPos;
     struct LocalPos {
@@ -22,7 +22,9 @@ namespace World
         int32_t x, z;
         ChunkPos operator+(const ChunkPos& other) const;
         WorldPos operator+(const LocalPos& other) const;
+        int32_t operator-(const ChunkPos& other) const;
         bool operator<(const ChunkPos& other) const;
+        bool operator==(const ChunkPos& other) const;
     };
     struct WorldPos {
         int32_t x, y, z;
