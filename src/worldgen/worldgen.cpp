@@ -9,9 +9,9 @@ namespace WorldGen
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution dist(0.0f, 100.0f);
+    std::uniform_real_distribution rand_chance(0.0f, 100.0f);
     bool random(const float chance) {
-        return dist(gen) < chance;
+        return rand_chance(gen) < chance;
     }
 
     constexpr float TREE_CHANCE = 0.1f;
@@ -53,6 +53,7 @@ namespace WorldGen
         World::set_block(world_pos, World::BLOCK::OAK_LEAVES);
     }
 
+    constexpr float TERRAIN_FREQUENCY = 1.5f;
     void generate_world() {
         FastNoiseLite noise;
         noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
@@ -61,7 +62,7 @@ namespace WorldGen
                 for (uint32_t local_x = 0; local_x < World::U_CHUNK_SIZE; local_x++) {
                     for (uint32_t local_z = 0; local_z < World::U_CHUNK_SIZE; local_z++) {
                         World::WorldPos world_pos = World::ChunkPos{chunk_x, chunk_z} + World::LocalPos{local_x, 0, local_z};
-                        const auto grass_height = static_cast<int32_t>((noise.GetNoise(static_cast<float>(world_pos.x), static_cast<float>(world_pos.z)) + 1.0f)
+                        const auto grass_height = static_cast<int32_t>((noise.GetNoise(static_cast<float>(world_pos.x)*TERRAIN_FREQUENCY, static_cast<float>(world_pos.z)*TERRAIN_FREQUENCY) + 1.0f)
                             / 2.0f * static_cast<float>(World::CHUNK_HEIGHT-1) / 2.0f);
                         int32_t y = 0;
                         for (; y < grass_height; y++) {
