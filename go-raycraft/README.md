@@ -1,3 +1,3 @@
 # Raycraft
 This is a small voxel game
-![](bin/assets/ss2.png)
+![](Raygocraft/assets/ss1.png)
