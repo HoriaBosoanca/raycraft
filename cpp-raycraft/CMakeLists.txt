@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 4.1)
 project(raycppcraft)
 set(CMAKE_CXX_STANDARD 23)
-if (WIN32)
-    set(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_EXE_LINKER_FLAGS "-static")
+if (NOT WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 endif ()
 file(GLOB SOURCES CONFIGURE_DEPENDS
     src/*.cpp
