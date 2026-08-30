@@ -17,15 +17,15 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
 )
 add_executable(raycppcraft ${SOURCES})
 target_include_directories(raycppcraft PRIVATE
-        src
-        src/world
-        src/world/chunk_model
-        src/world/rbgen
-        src/world/renderer
-        src/worldgen
-        src/player
+    src
+    src/world
+    src/world/chunk_model
+    src/world/rbgen
+    src/world/renderer
+    src/worldgen
+    src/player
 )
-set_target_properties(raycppcraft PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set_target_properties(raycppcraft PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/bin)
 
 # deps:
 #   raylib

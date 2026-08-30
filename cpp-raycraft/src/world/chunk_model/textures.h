@@ -13,7 +13,7 @@ namespace ChunkModel
     inline Texture2D ATLAS;
 
     inline void load_textures() {
-        ATLAS = LoadTexture("assets/atlas.png");
+        ATLAS = LoadTexture("../assets/atlas.png");
         default_mat = LoadMaterialDefault();
         cube = GenMeshCube(1.0f, 1.0f, 1.0f);
     }
